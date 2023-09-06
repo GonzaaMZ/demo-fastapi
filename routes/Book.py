@@ -1,12 +1,13 @@
 from fastapi import APIRouter, HTTPException
-from schemas.Book import BookCreate
+from schemas.Book import BookCreate, BookResponse
 from config.db import SessionLocal
 from models.Book import Book
 from fastapi.responses import JSONResponse
+from middlewares.verify_token_route import VerifyTokenRoutes
 
-router = APIRouter()
+router = APIRouter(route_class=VerifyTokenRoutes)
 
-@router.post("/input/{my_target_field}")
+@router.post("/input/{my_target_field}", response_model=dict)
 def create_book( book: BookCreate, my_target_field: str):
     db = SessionLocal()
     field_uppercase: str
@@ -31,10 +32,9 @@ def create_book( book: BookCreate, my_target_field: str):
     db.close()
     return JSONResponse(content={"id": new_book.id})
 
-@router.get("/get-data/{id}")
+@router.get("/get-data/{id}", response_model=BookResponse)
 def get_data(id: int):
     db = SessionLocal()
-    print(id)
     book = db.query(Book).filter(Book.id == id).first()
     db.close()
     if book is None:

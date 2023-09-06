@@ -5,7 +5,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - 8000:80
+      - 8000:8000
     environment:
       - SQLITE_PATH=/sqlite.db
     env_file:
