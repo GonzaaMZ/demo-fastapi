@@ -32,7 +32,7 @@ def create_book( book: BookCreate, my_target_field: str):
     db.close()
     return JSONResponse(content={"id": new_book.id})
 
-@router.get("/get-data/{id}", response_model=BookResponse)
+@router.get("/get-data/{id}")
 def get_data(id: int):
     db = SessionLocal()
     book = db.query(Book).filter(Book.id == id).first()
